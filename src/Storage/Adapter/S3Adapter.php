@@ -19,21 +19,23 @@ class S3Adapter implements AdapterInterface {
 
 	/**
 	 * Bucket name
-	 * @var string
 	 */
-	protected $bucket = '';
+	protected string $bucket = '';
 
 	/**
 	 * S3 instance
-	 * @var S3
 	 */
-	protected $s3;
+	protected S3 $s3;
 
 	/**
 	 * Cache array
-	 * @var array
 	 */
-	protected $cache = [];
+	protected array $cache = [];
+
+    /**
+     * Default ACL
+     */
+    protected string $default_acl = '';
 
 	/**
 	 * Constructor
@@ -42,8 +44,9 @@ class S3Adapter implements AdapterInterface {
 	 * @param string $secret_key Secret key
 	 * @param string $endpoint   Endpoint URL
 	 */
-	public function __construct(string $bucket, string $access_key, string $secret_key, string $endpoint = '') {
+	public function __construct(string $bucket, string $access_key, string $secret_key, string $endpoint = '', string $default_acl = 'private') {
 		$this->bucket = $bucket;
+        $this->default_acl = $default_acl;
 		$this->s3 = new S3($access_key, $secret_key, $endpoint);
 	}
 
@@ -76,7 +79,9 @@ class S3Adapter implements AdapterInterface {
 	 */
 	public function write(string $path, string $contents, array $config = []): bool {
 		$overwrite = $config['overwrite'] ?? false;
-		$headers = [];
+		$headers = [
+            'x-amz-acl' => $this->default_acl,
+        ];
 		if ($config) {
 			foreach ($config as $key => $value) {
 				if ($key == 'overwrite') continue;

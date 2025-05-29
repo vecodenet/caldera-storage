@@ -19,7 +19,7 @@ class Storage {
 	 * Storage adapter
 	 * @var AdapterInterface
 	 */
-	protected $adapter;
+	protected AdapterInterface $adapter;
 
 	/**
 	 * Constructor

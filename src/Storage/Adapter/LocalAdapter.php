@@ -22,9 +22,8 @@ class LocalAdapter implements AdapterInterface {
 
 	/**
 	 * Root directory
-	 * @var string
 	 */
-	protected $path = '';
+	protected string $path = '';
 
 	/**
 	 * Constructor
